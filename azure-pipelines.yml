@@ -7,7 +7,7 @@ trigger:
 - BranchPipeline
 
 pool:
-  vmImage: ubuntu-latest
+  name: Default   # Use self-hosted agent pool
 
 steps:
 - task: Maven@3
