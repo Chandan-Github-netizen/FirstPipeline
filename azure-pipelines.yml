@@ -4,26 +4,41 @@ trigger:
 pool:
   name: Default   # Self-hosted agent
 
-steps:
+stages:
 
-  # Step 1: Verify Java
-  - script: java -version
-    displayName: 'Check Java Version'
+  # =======================
+  # DEV Stage
+  # =======================
+  - stage: DEV
+    displayName: "Run Automation in DEV"
+    jobs:
+      - job: RunDevTests
+        displayName: "Execute Smoke Tests - DEV"
+        steps:
+          - script: mvn clean test -Denv=dev
+            displayName: "Run Tests in DEV"
 
-  # Step 2: Verify Maven
-  - script: mvn -version
-    displayName: 'Check Maven Version'
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              testRunTitle: 'DEV Test Results'
 
-  # Step 3: Clean and Build Project
-  - script: mvn clean
-    displayName: 'Build Project'
 
-  # Step 4: Run Tests
-  - script: mvn test
-    displayName: 'Run Automation Tests'
+  # =======================
+  # STAGE Stage
+  # =======================
+  - stage: STAGE
+    displayName: "Run Automation in STAGE"
+    dependsOn: DEV
+    condition: succeeded()     # Only run if DEV succeeds
+    jobs:
+      - job: RunStageTests
+        displayName: "Execute Regression Tests - STAGE"
+        steps:
+          - script: mvn clean test -Denv=stage
+            displayName: "Run Tests in STAGE"
 
-  # Step 5: Publish Test Results
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      testRunTitle: 'Automation Test Results'
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFiles: '**/surefire-reports/TEST-*.xml'
+              testRunTitle: 'STAGE Test Results'
