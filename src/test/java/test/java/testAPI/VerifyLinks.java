@@ -47,7 +47,7 @@ public class VerifyLinks {
 
             String link=url.getAttribute("src");
             try {
-                Response res = given().when().get(String.valueOf(link));  // Using HEAD (faster)
+                Response res = given().when().get(link);  // Using HEAD (faster)
 
                 int statusCode = res.getStatusCode();
 

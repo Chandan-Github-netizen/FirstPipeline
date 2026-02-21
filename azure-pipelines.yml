@@ -15,7 +15,7 @@ steps:
     displayName: 'Check Maven Version'
 
   # Step 3: Clean and Build Project
-  - script: mvn clean package
+  - script: mvn clean
     displayName: 'Build Project'
 
   # Step 4: Run Tests
