@@ -1,4 +1,4 @@
-@Test
+@Smoke
 
 Feature: Verify Links in Screener website
 
