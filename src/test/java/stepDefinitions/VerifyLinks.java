@@ -39,4 +39,9 @@ public class VerifyLinks {
         verifyLinksPage.validateLinks();
         driver.quit();
     }
+
+    @And("print regression is running")
+    public void regression() {
+        System.out.println("print regression is running");
+    }
 }
